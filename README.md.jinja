@@ -1,0 +1,60 @@
+# {{ project_name }}
+
+{{ description }}
+
+## Setup (uv)
+
+```bash
+uv sync
+```
+
+Install only specific groups:
+
+```bash
+uv sync --group dev --group lint --group test
+```
+
+## Common commands
+
+Run tests:
+
+```bash
+uv run pytest
+```
+
+Lint + format:
+
+```bash
+uv run ruff check .
+uv run ruff format .
+```
+
+Type check:
+
+```bash
+uv run mypy src
+```
+
+{% if project_type == "cli" %}
+## CLI
+
+Run the CLI:
+
+```bash
+uv run {{ project_slug }} --help
+```
+{% endif %}
+
+{% if project_type == "api" %}
+## API
+
+Run the API:
+
+```bash
+uv run uvicorn {{ package_name }}.api:app --reload
+```
+
+Healthcheck:
+
+- `GET /health`
+{% endif %}

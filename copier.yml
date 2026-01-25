@@ -1,0 +1,70 @@
+_min_copier_version: "9.0.0"
+
+# Keep user answers so projects can run `copier update` later
+_answers_file: ".copier-answers.yml"
+
+project_name:
+  type: str
+  help: "Human-friendly project name"
+  default: "My Project"
+
+project_slug:
+  type: str
+  help: "Repo/package slug (kebab-case)"
+  default: "my-project"
+  validator: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+
+package_name:
+  type: str
+  help: "Python import package name (snake_case)"
+  default: "{{ project_slug | replace('-', '_') }}"
+  validator: "^[a-zA-Z_][a-zA-Z0-9_]*$"
+
+description:
+  type: str
+  help: "One-line description"
+  default: ""
+
+author_name:
+  type: str
+  help: "Author name"
+  default: "Your Name"
+
+author_email:
+  type: str
+  help: "Author email"
+  default: "you@example.com"
+
+python_min_version:
+  type: str
+  help: "Minimum Python version"
+  default: "3.11"
+  validator: "^[0-9]+\\.[0-9]+$"
+
+project_type:
+  type: str
+  help: "Project type"
+  choices:
+    - library
+    - cli
+    - api
+    - ml
+  default: "library"
+
+include_ci:
+  type: bool
+  help: "Add GitHub Actions CI (uv + ruff + pytest)?"
+  default: true
+
+include_precommit:
+  type: bool
+  help: "Add pre-commit config (ruff + ruff-format)?"
+  default: true
+
+license:
+  type: str
+  help: "License"
+  choices:
+    - MIT
+    - Proprietary
+  default: "MIT"
