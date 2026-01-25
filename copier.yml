@@ -1,7 +1,15 @@
 _min_copier_version: "9.0.0"
-
-# Keep user answers so projects can run `copier update` later
 _answers_file: ".copier-answers.yml"
+
+_envops:
+  block_start_string: "{%"
+  block_end_string: "%}"
+  variable_start_string: "{{"
+  variable_end_string: "}}"
+  comment_start_string: "{#"
+  comment_end_string: "#}"
+  keep_trailing_newline: false
+
 
 project_name:
   type: str
@@ -10,15 +18,13 @@ project_name:
 
 project_slug:
   type: str
-  help: "Repo/package slug (kebab-case)"
-  default: "my-project"
-  validator: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+  help: "Repo/package slug (kebab-case, lowercase)"
+  default: "{{ project_name | lower | replace(' ', '-') | replace('_', '-') }}"
 
 package_name:
   type: str
   help: "Python import package name (snake_case)"
   default: "{{ project_slug | replace('-', '_') }}"
-  validator: "^[a-zA-Z_][a-zA-Z0-9_]*$"
 
 description:
   type: str
@@ -28,18 +34,17 @@ description:
 author_name:
   type: str
   help: "Author name"
-  default: "Your Name"
+  default: "Fabien Roduit"
 
 author_email:
   type: str
   help: "Author email"
-  default: "you@example.com"
+  default: "roduitfabien1@gmail.com"
 
 python_min_version:
   type: str
   help: "Minimum Python version"
   default: "3.11"
-  validator: "^[0-9]+\\.[0-9]+$"
 
 project_type:
   type: str
