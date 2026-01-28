@@ -8,10 +8,27 @@
 uv sync
 ```
 
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
 Install only specific groups:
 
 ```bash
 uv sync --group dev --group lint --group test
+```
+
+## Configuration
+
+Settings are loaded from environment variables and `.env` using
+[`pydantic-settings`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/).
+
+```python
+from {{ package_name }}.settings import settings
+
+print(settings.environment)
 ```
 
 ## Common commands
