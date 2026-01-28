@@ -11,6 +11,7 @@ license = { text = "MIT" }
 license = { text = "Proprietary" }
 {% endif %}
 dependencies = [
+  "pydantic-settings>=2.6",
 {% if project_type == "cli" %}
   "typer>=0.12",
 {% elif project_type == "api" %}

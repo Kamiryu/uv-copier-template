@@ -49,6 +49,8 @@ The template will prompt you for:
 - ✅ Pytest configuration
 - ✅ Ruff linter and formatter
 - ✅ MyPy type checking
+- ✅ Example `.env` template for local configuration
+- ✅ Pydantic settings module for loading env variables
 - ✅ Optional GitHub Actions CI/CD
 - ✅ Optional pre-commit hooks
 - ✅ Configurable project types (library, CLI, API, ML)
@@ -59,8 +61,10 @@ The template generates projects with:
 ```
 project-slug/
 ├── src/package_name/     # Main package code
+│   └── settings.py       # Pydantic settings loaded from .env/env vars
 ├── tests/                # Test files
 ├── pyproject.toml        # Project configuration (uv, pytest, ruff, mypy)
+├── .env.example          # Example environment file
 ├── .pre-commit-config.yaml  # Pre-commit hooks (if enabled)
 ├── .github/workflows/    # CI/CD workflows (if enabled)
 └── README.md            # Generated project README
