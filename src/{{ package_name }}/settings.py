@@ -8,6 +8,7 @@ class Settings(BaseSettings):
 
     environment: str = "development"
     log_level: str = "info"
+    log_file: str = "logs/app.log"
 
     model_config = SettingsConfigDict(env_file=".env", env_prefix="")
 
