@@ -5,7 +5,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Iterable
 
-form rich.logging import RichHandler
+from rich.logging import RichHandler
 
 DEFAULT_LOG_FORMAT = "%(message)s"
 FILE_LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
