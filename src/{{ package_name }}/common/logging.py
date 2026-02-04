@@ -1,14 +1,7 @@
 """Logging configuration with Rich console output and file handling."""
 
-import logging
-from logging.handlers import RotatingFileHandler
+import logging.config
 from pathlib import Path
-from typing import Iterable
-
-from rich.logging import RichHandler
-
-DEFAULT_LOG_FORMAT = "%(message)s"
-FILE_LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 
 
 def configure_logging(
@@ -17,32 +10,45 @@ def configure_logging(
     *,
     max_bytes: int = 5 * 1024 * 1024,
     backup_count: int = 3,
-    handlers: Iterable[logging.Handler] | None = None,
 ) -> None:
     """Configure logging with Rich console output and a rotating file handler."""
 
-    level = log_level.upper()
+    log_path = Path(log_file)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if handlers is None:
-        log_path = Path(log_file)
-        log_path.parent.mkdir(parents=True, exist_ok=True)
+    config = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "default": {
+                "format": "%(message)s",
+                "datefmt": "[%X]",
+            },
+            "detailed": {
+                "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "rich.logging.RichHandler",
+                "level": log_level.upper(),
+                "formatter": "default",
+                "rich_tracebacks": True,
+            },
+            "file": {
+                "class": "logging.handlers.RotatingFileHandler",
+                "level": log_level.upper(),
+                "formatter": "detailed",
+                "filename": str(log_path),
+                "maxBytes": max_bytes,
+                "backupCount": backup_count,
+                "encoding": "utf-8",
+            },
+        },
+        "root": {
+            "level": log_level.upper(),
+            "handlers": ["console", "file"],
+        },
+    }
 
-        file_handler = RotatingFileHandler(
-            log_path,
-            maxBytes=max_bytes,
-            backupCount=backup_count,
-            encoding="utf-8",
-        )
-        file_handler.setFormatter(logging.Formatter(FILE_LOG_FORMAT))
-
-        handlers = [
-            RichHandler(rich_tracebacks=True),
-            file_handler,
-        ]
-
-    logging.basicConfig(
-        level=level,
-        format=DEFAULT_LOG_FORMAT,
-        datefmt="[%X]",
-        handlers=list(handlers),
-    )
+    logging.config.dictConfig(config)
