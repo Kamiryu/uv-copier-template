@@ -1,5 +1,5 @@
-"""Common utilities for hte project."""
+"""Common utilities for the project."""
 
 from .logging import configure_logging
 
-___all__ = ["configure_logging"]
+__all__ = ["configure_logging"]
