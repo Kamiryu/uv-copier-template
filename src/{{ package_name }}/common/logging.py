@@ -11,6 +11,15 @@ DEFAULT_LOG_FORMAT = "%(message)s"
 FILE_LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 SUPPORTED_LOG_LEVELS = "critical, error, warning, info, debug, notset"
 
+_LEVEL_MAP: dict[str, int] = {
+    "CRITICAL": logging.CRITICAL,
+    "ERROR": logging.ERROR,
+    "WARNING": logging.WARNING,
+    "INFO": logging.INFO,
+    "DEBUG": logging.DEBUG,
+    "NOTSET": logging.NOTSET,
+}
+
 
 def configure_logging(
     log_level: str,
@@ -22,7 +31,7 @@ def configure_logging(
 ) -> None:
     """Configure logging with Rich console output and a rotating file handler."""
 
-    level = logging.getLevelNamesMapping().get(log_level.upper())
+    level = _LEVEL_MAP.get(log_level.upper())
     if level is None:
         raise ValueError(
             f"Unsupported log level: {log_level}. "
