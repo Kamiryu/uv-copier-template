@@ -1,0 +1,29 @@
+"""Command-line interface for {{ project_name }}."""
+
+from typing import Annotated
+
+import typer
+
+from .common.logging import configure_logging
+from .settings import settings
+
+app = typer.Typer(help="{{ description or project_name }}")
+
+
+@app.callback()
+def main(
+    log_level: Annotated[
+        str,
+        typer.Option(help="Logging level to use for this command."),
+    ] = settings.log_level,
+) -> None:
+    """Configure shared command-line options."""
+
+    configure_logging(log_level, settings.log_file)
+
+
+@app.command()
+def hello() -> None:
+    """Print a short readiness message."""
+
+    typer.echo("{{ project_name }} is ready.")

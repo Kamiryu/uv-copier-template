@@ -17,7 +17,7 @@ cp .env.example .env
 Install only specific groups:
 
 ```bash
-uv sync --group dev --group lint --group test
+uv sync --group dev --group lint --group test{% if include_notebooks %} --group notebooks{% endif %}{% if include_docs %} --group docs{% endif %}
 ```
 
 ## Configuration
@@ -30,6 +30,14 @@ from {{ package_name }}.settings import settings
 
 print(settings.environment)
 ```
+{% if include_database %}
+
+Database configuration defaults to local SQLite:
+
+```bash
+DATABASE_URL=sqlite:///./app.db
+```
+{% endif %}
 
 ## Common commands
 
@@ -59,6 +67,7 @@ Run the CLI:
 
 ```bash
 uv run {{ project_slug }} --help
+uv run {{ project_slug }} hello
 ```
 {% endif %}
 
@@ -74,4 +83,64 @@ uv run uvicorn {{ package_name }}.api:app --reload
 Healthcheck:
 
 - `GET /health`
+{% endif %}
+
+{% if project_type == "automation" %}
+## Automation
+
+Run the automation runner:
+
+```bash
+uv run {{ project_slug }} --help
+uv run {{ project_slug }} run
+```
+{% endif %}
+
+{% if project_type == "data" %}
+## Data
+
+This project includes the core data stack: NumPy, pandas, and PyArrow.
+{% endif %}
+
+{% if project_type == "ml" %}
+## Machine Learning
+
+This project includes the core ML stack: NumPy, pandas, and scikit-learn.
+{% endif %}
+
+{% if include_database %}
+## Database
+
+Create and apply Alembic migrations:
+
+```bash
+uv run alembic revision --autogenerate -m "initial schema"
+uv run alembic upgrade head
+```
+{% endif %}
+
+{% if include_http_client %}
+## HTTP Client
+
+This project includes `httpx` for outbound HTTP calls.
+{% endif %}
+
+{% if include_notebooks %}
+## Notebooks
+
+Start JupyterLab:
+
+```bash
+uv run --group notebooks jupyter lab
+```
+{% endif %}
+
+{% if include_docs %}
+## Docs
+
+Serve the documentation site locally:
+
+```bash
+uv run --group docs mkdocs serve
+```
 {% endif %}
