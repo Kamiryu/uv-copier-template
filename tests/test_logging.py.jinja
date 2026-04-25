@@ -1,0 +1,44 @@
+import logging
+import unittest
+
+from {{ package_name }}.common.logging import configure_logging
+
+
+class ConfigureLoggingTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.root_logger = logging.getLogger()
+        self.original_handlers = self.root_logger.handlers[:]
+        self.original_level = self.root_logger.level
+        self._clear_root_handlers()
+
+    def tearDown(self) -> None:
+        self._clear_root_handlers()
+        self.root_logger.setLevel(self.original_level)
+        for handler in self.original_handlers:
+            self.root_logger.addHandler(handler)
+
+    def _clear_root_handlers(self) -> None:
+        for handler in self.root_logger.handlers[:]:
+            self.root_logger.removeHandler(handler)
+
+    def test_configure_logging_replaces_existing_root_handlers(self) -> None:
+        original_handler = logging.NullHandler()
+        logging.basicConfig(level=logging.WARNING, handlers=[original_handler])
+        replacement_handler = logging.NullHandler()
+
+        configure_logging(
+            "info",
+            "unused.log",
+            handlers=[replacement_handler],
+        )
+
+        self.assertEqual(logging.INFO, self.root_logger.level)
+        self.assertEqual([replacement_handler], self.root_logger.handlers)
+
+    def test_configure_logging_rejects_unknown_log_levels(self) -> None:
+        with self.assertRaisesRegex(ValueError, "Unsupported log level: verbose"):
+            configure_logging(
+                "verbose",
+                "unused.log",
+                handlers=[logging.NullHandler()],
+            )

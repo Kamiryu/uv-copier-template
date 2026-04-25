@@ -1,14 +1,24 @@
 """Logging configuration with Rich console output and file handling."""
 
 import logging
+from collections.abc import Iterable
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from typing import Iterable
 
 from rich.logging import RichHandler
 
 DEFAULT_LOG_FORMAT = "%(message)s"
 FILE_LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
+SUPPORTED_LOG_LEVELS = "critical, error, warning, info, debug, notset"
+
+_LEVEL_MAP: dict[str, int] = {
+    "CRITICAL": logging.CRITICAL,
+    "ERROR": logging.ERROR,
+    "WARNING": logging.WARNING,
+    "INFO": logging.INFO,
+    "DEBUG": logging.DEBUG,
+    "NOTSET": logging.NOTSET,
+}
 
 
 def configure_logging(
@@ -21,7 +31,12 @@ def configure_logging(
 ) -> None:
     """Configure logging with Rich console output and a rotating file handler."""
 
-    level = log_level.upper()
+    level = _LEVEL_MAP.get(log_level.upper())
+    if level is None:
+        raise ValueError(
+            f"Unsupported log level: {log_level}. "
+            f"Use one of: {SUPPORTED_LOG_LEVELS}."
+        )
 
     if handlers is None:
         log_path = Path(log_file)
@@ -43,6 +58,6 @@ def configure_logging(
     logging.basicConfig(
         level=level,
         format=DEFAULT_LOG_FORMAT,
-        datefmt="[%X]",
         handlers=list(handlers),
+        force=True,
     )

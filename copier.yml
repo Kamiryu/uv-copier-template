@@ -1,5 +1,9 @@
 _min_copier_version: "9.0.0"
 _answers_file: ".copier-answers.yml"
+_exclude:
+  - "copier.yml"
+  - "copier.yaml"
+  - "template_tests"
 
 _envops:
   block_start_string: "{%"
@@ -53,17 +57,39 @@ project_type:
     - library
     - cli
     - api
+    - data
     - ml
+    - automation
   default: "library"
+
+include_http_client:
+  type: bool
+  help: "Add HTTP client support with httpx?"
+  default: "{% if project_type == 'automation' %}true{% else %}false{% endif %}"
+
+include_database:
+  type: bool
+  help: "Add SQLAlchemy + Alembic database support?"
+  default: false
+
+include_notebooks:
+  type: bool
+  help: "Add a notebooks dependency group?"
+  default: "{% if project_type in ['data', 'ml'] %}true{% else %}false{% endif %}"
+
+include_docs:
+  type: bool
+  help: "Add a docs dependency group?"
+  default: false
 
 include_ci:
   type: bool
-  help: "Add GitHub Actions CI (uv + ruff + pytest)?"
+  help: "Add GitHub Actions CI (uv + ruff + mypy + pytest)?"
   default: true
 
 include_precommit:
   type: bool
-  help: "Add pre-commit config (ruff + ruff-format)?"
+  help: "Add pre-commit config (ruff + ruff-format + mypy)?"
   default: true
 
 license:

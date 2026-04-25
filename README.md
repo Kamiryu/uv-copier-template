@@ -38,7 +38,11 @@ The template will prompt you for:
 - **Author name**: Your name
 - **Author email**: Your email
 - **Python version**: Minimum Python version (default: 3.11)
-- **Project type**: library, cli, api, or ml
+- **Project type**: library, cli, api, data, ml, or automation
+- **Include HTTP client**: Add `httpx`
+- **Include database**: Add SQLAlchemy + Alembic scaffold
+- **Include notebooks**: Add a notebooks dependency group
+- **Include docs**: Add a docs dependency group
 - **Include CI**: Add GitHub Actions workflow
 - **Include pre-commit**: Add pre-commit configuration
 - **License**: MIT or Proprietary
@@ -53,7 +57,8 @@ The template will prompt you for:
 - ✅ Pydantic settings module for loading env variables
 - ✅ Optional GitHub Actions CI/CD
 - ✅ Optional pre-commit hooks
-- ✅ Configurable project types (library, CLI, API, ML)
+- ✅ Configurable project presets (library, CLI, API, data, ML, automation)
+- ✅ Optional HTTP client, database, notebooks, and docs support
 
 ## Project Structure
 
@@ -62,8 +67,10 @@ The template generates projects with:
 project-slug/
 ├── src/package_name/     # Main package code
 │   └── settings.py       # Pydantic settings loaded from .env/env vars
+├── alembic/              # Database migrations (if enabled)
 ├── tests/                # Test files
 ├── pyproject.toml        # Project configuration (uv, pytest, ruff, mypy)
+├── alembic.ini           # Alembic configuration (if database enabled)
 ├── .env.example          # Example environment file
 ├── .pre-commit-config.yaml  # Pre-commit hooks (if enabled)
 ├── .github/workflows/    # CI/CD workflows (if enabled)
