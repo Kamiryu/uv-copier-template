@@ -100,6 +100,14 @@ def test_template_tests_are_not_rendered_into_generated_projects(tmp_path: Path)
     assert not (project / "template_tests").exists()
 
 
+def test_template_git_metadata_is_not_rendered_into_generated_projects(
+    tmp_path: Path,
+) -> None:
+    project = render_project(tmp_path)
+
+    assert not (project / ".git").exists()
+
+
 def test_generated_text_files_do_not_contain_unresolved_jinja(tmp_path: Path) -> None:
     project = render_project(
         tmp_path,

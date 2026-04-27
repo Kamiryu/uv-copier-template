@@ -3,6 +3,12 @@ _answers_file: ".copier-answers.yml"
 _exclude:
   - "copier.yml"
   - "copier.yaml"
+  - "~*"
+  - "*.py[co]"
+  - "__pycache__"
+  - ".git"
+  - ".DS_Store"
+  - ".svn"
   - "template_tests"
 
 _envops:
