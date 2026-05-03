@@ -6,7 +6,6 @@ __pycache__/
 .ruff_cache/
 dist/
 build/
-uv.lock
 .copier-answers.yml
 .vscode/
 .env
